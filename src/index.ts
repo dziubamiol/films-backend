@@ -35,4 +35,4 @@ app.use('/', routers);
 
 /* Starting server */
 console.log(`Started ${process.env.NODE_ENV} at ${process.env.PORT}`);
-app.listen(process.env.NODE_ENV);
+app.listen(process.env.PORT);
