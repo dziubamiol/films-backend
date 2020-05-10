@@ -1,4 +1,4 @@
- import passport from 'passport';
+import passport from 'passport';
 import User, { IUserPayload } from './../models/User';
 import bcrypt from 'bcrypt';
 import { Strategy } from 'passport-local';
@@ -8,12 +8,13 @@ passport.use(new Strategy((username, password, done) => {
     User.get({username})
         .then((user: IUserPayload | null) => {
             if (user === null) done(null, false);
-
-            bcrypt.compare(password, user?.passHash as string)
-                .then((valid: boolean) => {
-                    if (valid) done(null, user);
-                    else done(null, false);
-                }).catch(err => done(err));
+            else {
+                bcrypt.compare(password, user?.passHash as string)
+                    .then((valid: boolean) => {
+                        if (valid) done(null, user);
+                        else done(null, false);
+                    }).catch(err => done(err));
+            }
         }).catch(err => done(err));
 }));
 
