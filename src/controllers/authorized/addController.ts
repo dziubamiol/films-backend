@@ -11,11 +11,10 @@ const index = async (req: Request, res: Response) => {
         releaseYear: film.releaseYear.toString()
     });
 
-    console.log(filmsInDB);
 
     if (filmsInDB.length === 0) {
         await films.put(film);
-        res.sendStatus(HTTPStatus.OK);
+        res.sendStatus(HTTPStatus.CREATED);
     } else {
         res.sendStatus(HTTPStatus.NOT_MODIFIED);
     }

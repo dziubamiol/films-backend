@@ -8,8 +8,9 @@ export const schemaValidator = [
 ];
 
 export const validate = (req: Request, res: Response, next: NextFunction) => {
-    if (!validationResult(req).isEmpty()) {
-        return res.sendStatus(HTTPStatus.UNPROCESSABLE_ENTITY);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(HTTPStatus.UNPROCESSABLE_ENTITY).json({ errors: errors.array() });
     }
     next();
 }

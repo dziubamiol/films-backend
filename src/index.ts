@@ -4,30 +4,35 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 /* Initializing utility middleware */
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
 const app = express();
 
-app.use(cookieParser());
-app.use(bodyParser.json({type: 'application/json'}));
-app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors({
-    preflightContinue: true,
+    origin: process.env.ALLOWED_DOMAIN,
     credentials: true,
 }));
 
+app.use(cookieParser());
+app.use(bodyParser.json({type: 'application/json'}));
+app.use(bodyParser.urlencoded({extended: true}));
 
 /* Session middleware */
 import passport from './passport/index';
 import session from 'express-session';
 
-app.use(session({
+app.use('*', session({
     secret: process.env.SESSION_SECRET as string,
-    resave: false,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+    },
+    resave: true,
     saveUninitialized: false
+
 }));
 app.use(passport.initialize());
 app.use(passport.session());

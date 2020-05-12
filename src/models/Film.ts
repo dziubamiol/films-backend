@@ -39,7 +39,6 @@ export const get = async (search: ISearchFilm): Promise<Array<IFilmPayload>[]> =
     search.format && (searchRequest.format = { $eq: search.format});
     search.actor && (searchRequest.actors = new RegExp(search.actor));
 
-    console.log(searchRequest);
 
     const cursor = films.find<Array<IFilmPayload>>(searchRequest);
 

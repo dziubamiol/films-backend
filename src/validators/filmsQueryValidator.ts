@@ -4,9 +4,9 @@ import * as HTTPStatus from 'http-status-codes';
 
 const queryValidator = [
     check('id').optional().isAlphanumeric(),
-    check('name').optional().matches(/^[A-Za-z]+$/).withMessage('Film name should contain alphabetic characters only'),
+    check('name').optional().matches(/^[A-Za-z ]+$/).withMessage('Film name should contain alphabetic characters only'),
     check('releaseYear').optional().matches(/^\d+$/).withMessage('Release year should be a number'),
-    check('format').optional().matches(/^VHS|DVD|Blue-Ray$/).withMessage('Format should be VHS, DVD or Blue-Ray'),
+    check('format').optional().matches(/^VHS|DVD|Blu-Ray$/).withMessage('Format should be VHS, DVD or Blue-Ray'),
     check('actor').optional().matches(/^[A-Za-z ]+$/).withMessage('Actor name should contain alphabetic characters only'),
 
     check('offset').notEmpty().matches(/^\d+$/).withMessage('Invalid offset'),
