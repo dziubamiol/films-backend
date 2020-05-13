@@ -43,13 +43,13 @@ router.get('/user/me/',
 );
 
 /* Protected routes */
-router.post('/add',
+router.post('/films/add',
     mustAuthenticated,
     filmsBodyValidator.bodyValidator,
     filmsBodyValidator.validator,
     addController
 );
-router.delete('/remove',
+router.delete('/films/remove',
     mustAuthenticated,
     removeQueryValidator.queryValidator,
     removeQueryValidator.validator,
