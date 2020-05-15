@@ -40,10 +40,13 @@ export const get = async (search: ISearchFilm): Promise<Array<IFilmPayload>[]> =
     search.actor && (searchRequest.actors = new RegExp(search.actor));
 
 
-    const cursor = films.find<Array<IFilmPayload>>(searchRequest);
+    let cursor = films.find<Array<IFilmPayload>>(searchRequest);
 
     /* Sorting */
-    search.sort && search.sortField && cursor.sort({ [search.sortField]: search.sort === 'asc' ? 1 : -1})
+    search.sort &&
+    search.sortField &&
+    cursor.sort({ [search.sortField]: search.sort === 'asc' ? 1 : -1})
+        .collation( { locale: 'en' }); // collate to make lowercase with same letter just after uppercase
 
     const offset = search.offset ? parseInt(search.offset): 0;
     const pageSize = search.pageSize ? parseInt(search.pageSize): 1;
