@@ -17,12 +17,13 @@ const index = async (req: Request, res: Response) => {
     let sameActors = false;
 
     for (const [i, actor] of film.actors.entries()) {
-        if (film.actors.indexOf(actor, i) !== -1) sameActors = true;
+        if (film.actors.indexOf(actor, i + 1) !== -1) sameActors = true;
     }
 
-    if (filmsInDB.length === 0 && !sameActors) {
-        await films.put(film);
-        res.sendStatus(HTTPStatus.CREATED);
+    if (filmsInDB.films.length === 0 && !sameActors) {
+        const id = await films.put(film);
+
+        res.status(HTTPStatus.CREATED).json({ id: id });
     } else if (sameActors) {
         res.status(HTTPStatus.UNPROCESSABLE_ENTITY).json({
             errors:

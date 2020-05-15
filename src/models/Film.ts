@@ -22,11 +22,17 @@ export interface ISearchFilm {
     sortField?: 'name' | 'releaseYear';
 }
 
-export interface IFilmPayload extends IFilm {
+
+export interface IFilmDBPayload extends IFilm {
     _id: ObjectId;
 }
 
-export const get = async (search: ISearchFilm): Promise<Array<IFilmPayload>[]> => {
+export interface IFilmPayload {
+    total: number;
+    films: Array<IFilmDBPayload>[];
+}
+
+export const get = async (search: ISearchFilm): Promise<IFilmPayload> => {
     await waitUntilDBConnected();
     const films = db.collection<IFilmPayload>(collections.films);
 
@@ -40,7 +46,7 @@ export const get = async (search: ISearchFilm): Promise<Array<IFilmPayload>[]> =
     search.actor && (searchRequest.actors = new RegExp(search.actor));
 
 
-    let cursor = films.find<Array<IFilmPayload>>(searchRequest);
+    let cursor = films.find<Array<IFilmDBPayload>>(searchRequest);
 
     /* Sorting */
     search.sort &&
@@ -56,21 +62,24 @@ export const get = async (search: ISearchFilm): Promise<Array<IFilmPayload>[]> =
     cursor.skip(skip).limit(pageSize);
 
 
-    return await cursor.toArray();
+    return {
+        total: await films.count(),
+        films: await cursor.toArray(),
+    };
 }
 
-export const put = async (film: IFilm): Promise<boolean> => {
+export const put = async (film: IFilm): Promise<IFilmDBPayload['_id']> => {
     await waitUntilDBConnected();
-    const films = db.collection<IFilmPayload>(collections.films);
+    const films = db.collection<IFilmDBPayload>(collections.films);
 
-    await films.insertOne(film);
+    const status = await films.insertOne(film);
 
-    return true;
+    return status.insertedId;
 }
 
 export const remove = async (id: string): Promise<boolean> => {
     await waitUntilDBConnected();
-    const films = db.collection<IFilmPayload>(collections.films);
+    const films = db.collection<IFilmDBPayload>(collections.films);
 
     const _id = new ObjectId(id);
 

@@ -22,7 +22,16 @@ const localeWrapper = (method: method, value: string, locales: Array<Alphanumeri
 }
 
 
-export const isAlphanumeric = (value: string, locales: Array<AlphanumericLocale> = supportedLocales) => {
+export const isAlphanumeric = (value: string, allowed?: string,  locales: Array<AlphanumericLocale> = supportedLocales) => {
+    if (allowed) {
+        const words = value.split(allowed);
+
+        for (const word of words) {
+            if (!localeWrapper(validator.isAlphanumeric, word, locales)) return false;
+        }
+        return true;
+    }
+
     return localeWrapper(validator.isAlphanumeric, value, locales);
 }
 
