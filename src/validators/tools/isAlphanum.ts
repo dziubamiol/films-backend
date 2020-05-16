@@ -23,6 +23,9 @@ const localeWrapper = (method: method, value: string, locales: Array<Alphanumeri
 
 
 export const isAlphanumeric = (value: string, allowed?: string,  locales: Array<AlphanumericLocale> = supportedLocales) => {
+    value = value.trim();
+    value = value.replace(',', '').replace(':', '');
+
     if (allowed) {
         const words = value.split(allowed);
 
@@ -36,6 +39,8 @@ export const isAlphanumeric = (value: string, allowed?: string,  locales: Array<
 }
 
 export const isAlpha = (value: string, allowed?: string, locales: Array<AlphanumericLocale> = supportedLocales) => {
+    value = value.trim();
+
     if (allowed) {
         const words = value.split(allowed);
 
